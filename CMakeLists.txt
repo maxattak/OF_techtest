@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.15)
+project(openfleet_techtest)
+
+set(CMAKE_CXX_STANDARD 14)
+
+add_executable(openfleet_techtest main.cpp HardwareAbstraction/CoinAcceptorInterface.h HardwareAbstraction/CoinAcceptorDollarClass.cpp HardwareAbstraction/CoinAcceptorDollarClass.h HardwareAbstraction/CoinAcceptorEuroClass.cpp HardwareAbstraction/CoinAcceptorEuroClass.h HardwareAbstraction/CoinAcceptorFactoryClass.cpp HardwareAbstraction/CoinAcceptorFactoryClass.h)
