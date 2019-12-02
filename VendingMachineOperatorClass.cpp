@@ -3,19 +3,32 @@
 #include <unistd.h>
 #include "VendingMachineOperatorClass.h"
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wmissing-noreturn"
+namespace
+{
+    void fakeProcessingLog(const std::string& log)
+    {
+        std::cout << log;
+        for (int i = 0; i < 3; ++i)
+        {
+            usleep(500 * 1000);
+            std::cout << ".";
+        }
+
+        std::cout << std::endl;
+    }
+}
+
 void VendingMachineOperatorClass::run()
 {
     while (1)
     {
-        _inventoryManager->printInventory();
+        if (_isItemSaleEnable) _inventoryManager->printInventory();
         printf("\n"
                "  R - Read NFC Card\n"
                "  X - Cancel\n");
 
         std::string selection;
-        std::cout << "Enter selection: ";
+        std::cout << "Enter selection: >";
         std::cin >> selection;
 
         if (selection == "x" || selection == "X")
@@ -43,53 +56,72 @@ void VendingMachineOperatorClass::run()
             }
             continue;
         }
-
-        int priceToPay = _inventoryManager->getItemPrice(selection);
-        if (priceToPay != 0)
+        else if (_isItemSaleEnable)
         {
-            std::cout << "Insert coin to buy " << _inventoryManager->getItemDescription(selection) << std::endl;
-
-            while (priceToPay > 0)
+            int priceToPay = _inventoryManager->getItemPrice(selection);
+            if (priceToPay != 0)
             {
-                std::cout << (priceToPay / 100.0) << " left to pay" << std::endl;
-                int coinValue = _coinAcceptor->readCoin();
+                std::cout << "Insert coin to buy " << _inventoryManager->getItemDescription(selection) << std::endl;
 
-                if (coinValue < 0)
+                while (priceToPay > 0)
                 {
-                    std::cout << "Transaction cancelled" << std::endl;
-                    break;
+                    std::cout << (priceToPay / 100.0) << " left to pay" << std::endl;
+                    int coinValue = _coinAcceptor->readCoin();
+
+                    if (coinValue < 0)
+                    {
+                        std::cout << "Transaction cancelled" << std::endl;
+                        break;
+                    }
+
+                    priceToPay -= coinValue;
                 }
 
-                priceToPay -= coinValue;
-            }
-
-            if (priceToPay <= 0)
+                if (priceToPay <= 0)
+                {
+                    std::cout << "Thank you, don't forget you snack." << std::endl;
+                }
+            } else
             {
-                std::cout << "Thank you, don't forget you snack." << std::endl;
+                std::cout << "Product not in the inventory" << std::endl;
             }
-        } else
-        {
-            std::cout << "Product not in the inventory" << std::endl;
         }
     }
 }
-#pragma clang diagnostic pop
 
 void VendingMachineOperatorClass::brewCoffee() const
 {
-    std::cout << "Brewing coffee";
-
-    for (int i = 0; i < 3; ++i)
-    {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        usleep(500 * 1000);
-#pragma clang diagnostic pop
-        std::cout << ".";
-    }
+    fakeProcessingLog("Brewing coffee");
 }
 
 void VendingMachineOperatorClass::startMaintenanceMode(uint64_t techId_)
 {
     std::cout << "Tech ID " << techId_ << " entered maintenance mode" << std::endl;
+    fakeProcessingLog("Running diagnose tests");
+
+    bool exit = false;
+    while (!exit)
+    {
+        std::cout << "Select action to perform:\n"
+                  << "  I - " << (_isItemSaleEnable ? "Dis" : "En") << "able item sale\n"
+                  << "  S - Reset machine\n\n"
+                  << "  R - Read card\n\n"
+                  << "Your selection: >";
+
+        char input;
+        std::cin >> input;
+
+        if (std::toupper(input) == 'I')
+        {
+            _isItemSaleEnable = !_isItemSaleEnable;
+        }
+        else if (std::toupper(input) == 'S')
+        {
+            fakeProcessingLog("Resetting the machine");
+        }
+        else if (std::toupper(input) == 'R')
+        {
+            exit = (techId_ == _nfcReaderController->readCard());
+        }
+    }
 }

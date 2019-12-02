@@ -13,11 +13,12 @@ public:
     VendingMachineOperatorClass(const std::shared_ptr<CoinAcceptorInterface>& coinAcceptor_,
             const std::shared_ptr<InventoryManagerClass>& inventoryManager_,
             const std::shared_ptr<UserManagerClass>& userManager_,
-            const std::shared_ptr<NFCReaderControllerClass>& nfcReaderController_) :
+            const std::shared_ptr<NFCReaderControllerClass>& nfcReaderController_):
             _coinAcceptor(coinAcceptor_),
             _inventoryManager(inventoryManager_),
             _userManager(userManager_),
-            _nfcReaderController(nfcReaderController_) {}
+            _nfcReaderController(nfcReaderController_),
+            _isItemSaleEnable(true) {}
 
     void run();
 
@@ -25,6 +26,8 @@ private:
     void brewCoffee() const;
 
     void startMaintenanceMode(uint64_t techId_);
+
+    bool _isItemSaleEnable;
 
     std::shared_ptr<CoinAcceptorInterface> _coinAcceptor;
     std::shared_ptr<InventoryManagerClass> _inventoryManager;

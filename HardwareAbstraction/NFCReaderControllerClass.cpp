@@ -19,7 +19,7 @@ uint64_t NFCReaderControllerClass::readCard() const
         {
             std::cout << "  " << line << std::endl;
         }
-        std::cout << "Enter user ID: ";
+        std::cout << "Enter user ID: >";
 
         std::string rawInput;
         std::cin >> userId;
