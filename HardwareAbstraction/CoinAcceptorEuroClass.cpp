@@ -1,9 +1,6 @@
-//
-// Created by Max on 2019-12-01.
-//
-
 #include <cstdio>
 #include <iostream>
+
 #include "CoinAcceptorEuroClass.h"
 
 int CoinAcceptorEuroClass::readCoin() {

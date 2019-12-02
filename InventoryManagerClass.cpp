@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
+
 #include "StringUtil.h"
+
 #include "InventoryManagerClass.h"
 
 const std::string InventoryManagerClass::INVENTORY_CONF_FILEPATH("../etc/inventory.conf");

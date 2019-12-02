@@ -1,6 +1,6 @@
 #include <iostream>
-#include <thread>
 #include <unistd.h>
+
 #include "VendingMachineOperatorClass.h"
 
 namespace
@@ -87,6 +87,8 @@ void VendingMachineOperatorClass::run()
             }
         }
     }
+
+    std::cout << "Exiting main logic" << std::endl;
 }
 
 void VendingMachineOperatorClass::brewCoffee() const
