@@ -1,7 +1,3 @@
-//
-// Created by Max on 2019-12-01.
-//
-
 #include <fstream>
 #include <iostream>
 #include "StringUtil.h"
@@ -20,6 +16,11 @@ InventoryManagerClass::InventoryManagerClass()
             try
             {
                 auto splitLine = StringUtil::split(line, ",");
+
+                if (splitLine.size() != 3)
+                {
+                    throw std::invalid_argument("Invalid number of fields (expected ID,description,price)");
+                }
 
                 std::string description = splitLine[1];
                 description.erase(std::remove(description.begin(), description.end(), '"'), description.end());

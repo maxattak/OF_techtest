@@ -1,8 +1,9 @@
 #include <iostream>
-#include <cctype>
 
 #include "InventoryManagerClass.h"
 #include "HardwareAbstraction/CoinAcceptorFactoryClass.h"
+#include "HardwareAbstraction/NFCReaderControllerClass.h"
+#include "UserManagerClass.h"
 #include "VendingMachineOperatorClass.h"
 
 int readModel();
@@ -16,8 +17,10 @@ int main() {
 
     auto coinAcceptor = CoinAcceptorFactoryClass::createCoinAcceptor(coinAcceptorCurrency);
     std::shared_ptr<InventoryManagerClass> inventoryManager = std::make_shared<InventoryManagerClass>();
+    std::shared_ptr<UserManagerClass> userManager = std::make_shared<UserManagerClass>();
+    std::shared_ptr<NFCReaderControllerClass> nfcReader = std::make_shared<NFCReaderControllerClass>();
 
-    VendingMachineOperatorClass vendingMachineOperator(coinAcceptor, inventoryManager);
+    VendingMachineOperatorClass vendingMachineOperator(coinAcceptor, inventoryManager, userManager, nfcReader);
 
     vendingMachineOperator.run();
 
