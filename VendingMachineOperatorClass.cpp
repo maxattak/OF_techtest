@@ -79,7 +79,7 @@ void VendingMachineOperatorClass::run()
 
                 if (priceToPay <= 0)
                 {
-                    std::cout << "Thank you, don't forget you snack." << std::endl;
+                    std::cout << "Thank you, don't forget your snack." << std::endl;
                 }
             } else
             {
