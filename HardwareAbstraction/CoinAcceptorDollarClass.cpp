@@ -39,6 +39,7 @@ int CoinAcceptorDollarClass::readCoin() {
                 coinValue = 200;
                 break;
             case 'X':
+            case 'x':
                 coinValue = -1;
                 break;
             default:

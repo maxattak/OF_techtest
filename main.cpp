@@ -1,18 +1,25 @@
 #include <iostream>
 #include <cctype>
 
+#include "InventoryManagerClass.h"
 #include "HardwareAbstraction/CoinAcceptorFactoryClass.h"
+#include "VendingMachineOperatorClass.h"
 
 int readModel();
 
 int main() {
     int model = readModel();
 
-    std::cout << "Model is " << (model == 1 ? "NA" : "EU");
+    std::cout << "Model is " << (model == 1 ? "NA" : "EU") << std::endl;
     CoinAcceptorCurrencyEnum coinAcceptorCurrency =
          (model == 1) ? CoinAcceptorCurrencyEnum::Dollar : CoinAcceptorCurrencyEnum::Euro;
 
     auto coinAcceptor = CoinAcceptorFactoryClass::createCoinAcceptor(coinAcceptorCurrency);
+    std::shared_ptr<InventoryManagerClass> inventoryManager = std::make_shared<InventoryManagerClass>();
+
+    VendingMachineOperatorClass vendingMachineOperator(coinAcceptor, inventoryManager);
+
+    vendingMachineOperator.run();
 
     return 0;
 }
